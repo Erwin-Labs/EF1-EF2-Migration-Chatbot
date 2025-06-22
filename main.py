@@ -198,10 +198,15 @@ def main():
 
     with col1:
         st.header("⚙️ Configuration")
-        groq_api_key = st.text_input("Clé API Groq", type="password")
-        if groq_api_key:
-            st.success("✅ Clé API Groq enregistrée")
-        
+        # Fetch Groq API key from Streamlit secrets
+        try:
+            groq_api_key = st.secrets["GROQ_API_KEY"]
+            st.success("✅ Clé API Groq chargée depuis les secrets.")
+        except KeyError:
+            groq_api_key = None
+            st.error("🔑 Clé API Groq non trouvée. Veuillez la configurer dans vos secrets Streamlit.")
+            st.markdown("Pour plus d'informations, consultez la [documentation Streamlit sur les secrets](https://docs.streamlit.io/library/advanced-features/secrets-management).")
+
         edit_prompt_modal()
         
         # Sélection du modèle
@@ -240,10 +245,20 @@ def main():
 
     with col3:
         st.header("📤 Extension EF2 (YAML)")
-        if st.button("Convertir", key="convert", disabled=not (groq_api_key and ef1_input and json_valid)):
-            conv = DynatraceConverter(groq_api_key)
-            with st.spinner("Conversion en cours…"):
-                raw_yaml = conv.convert_ef1_to_ef2(ef1_input, st.session_state.system_prompt, st.session_state.selected_model)
+        # The button should be disabled if the API key is not available (None),
+        # or if there's no EF1 input, or if the JSON is not valid.
+        convert_button_disabled = not (groq_api_key and ef1_input and json_valid)
+        if st.button("Convertir", key="convert", disabled=convert_button_disabled):
+            if groq_api_key: # Ensure groq_api_key is not None before proceeding
+                conv = DynatraceConverter(groq_api_key)
+                with st.spinner("Conversion en cours…"):
+                    raw_yaml = conv.convert_ef1_to_ef2(ef1_input, st.session_state.system_prompt, st.session_state.selected_model)
+            else:
+                # This case should ideally not be reached if the button is correctly disabled.
+                # However, as a fallback, inform the user.
+                st.error("La clé API Groq n'est pas configurée. Impossible de convertir.")
+                # Prevent further execution in this block if API key is missing
+                st.stop()
                 yaml_clean = conv.normalize_yaml(raw_yaml)
                 st.text_area("YAML EF2", yaml_clean, height=450)
                 try:
