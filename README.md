@@ -38,13 +38,17 @@ pip install -r requirements.txt
 
 ### 3. Configure Groq API Key
 
-Create a secrets file for your Groq API key:
-```bash
-# The .streamlit/secrets.toml file has been created for you
-# Edit it and replace "your_groq_api_key_here" with your actual Groq API key
+Create a secrets file for your Groq API key. If it doesn't exist, create a folder named `.streamlit` in the root of your project, and inside it, a file named `secrets.toml`.
+
+Add your Groq API key to `.streamlit/secrets.toml` like this:
+
+```toml
+GROQ_API_KEY = "your_groq_api_key_here"
 ```
 
-**Important:** Your Groq API key is now securely stored in `.streamlit/secrets.toml` and will not be committed to version control.
+Replace `"your_groq_api_key_here"` with your actual Groq API key.
+
+**Important:** This `secrets.toml` file should be listed in your `.gitignore` file to ensure your API key is not committed to version control.
 
 ### 4. Run the Application
 
@@ -143,13 +147,17 @@ pip install -r requirements.txt
 
 ### Étape 4 : Configurer la clé API Groq
 
-Configurez votre clé API Groq de manière sécurisée :
-```bash
-# Le fichier .streamlit/secrets.toml a été créé pour vous
-# Éditez-le et remplacez "your_groq_api_key_here" par votre vraie clé API Groq
+Configurez votre clé API Groq de manière sécurisée. Si ce n'est pas déjà fait, créez un dossier nommé `.streamlit` à la racine de votre projet, et à l'intérieur, un fichier nommé `secrets.toml`.
+
+Ajoutez votre clé API Groq dans le fichier `.streamlit/secrets.toml` comme suit :
+
+```toml
+GROQ_API_KEY = "votre_cle_api_groq_ici"
 ```
 
-**Important :** Votre clé API Groq est maintenant stockée de manière sécurisée dans `.streamlit/secrets.toml` et ne sera pas commitée dans le contrôle de version.
+Remplacez `"votre_cle_api_groq_ici"` par votre véritable clé API Groq.
+
+**Important :** Ce fichier `secrets.toml` doit être listé dans votre fichier `.gitignore` pour garantir que votre clé API n'est pas commitée dans le contrôle de version.
 
 ### Étape 5 : Lancer l'application Streamlit
 
