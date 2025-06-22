@@ -36,7 +36,17 @@ Install required Python packages:
 pip install -r requirements.txt
 ```
 
-### 3. Run the Application
+### 3. Configure Groq API Key
+
+Create a secrets file for your Groq API key:
+```bash
+# The .streamlit/secrets.toml file has been created for you
+# Edit it and replace "your_groq_api_key_here" with your actual Groq API key
+```
+
+**Important:** Your Groq API key is now securely stored in `.streamlit/secrets.toml` and will not be committed to version control.
+
+### 4. Run the Application
 
 Start the Streamlit app:
 ```bash
@@ -131,7 +141,17 @@ Cette commande lira le fichier `requirements.txt` et installera les bibliothèqu
 pip install -r requirements.txt
 ```
 
-### Étape 4 : Lancer l'application Streamlit
+### Étape 4 : Configurer la clé API Groq
+
+Configurez votre clé API Groq de manière sécurisée :
+```bash
+# Le fichier .streamlit/secrets.toml a été créé pour vous
+# Éditez-le et remplacez "your_groq_api_key_here" par votre vraie clé API Groq
+```
+
+**Important :** Votre clé API Groq est maintenant stockée de manière sécurisée dans `.streamlit/secrets.toml` et ne sera pas commitée dans le contrôle de version.
+
+### Étape 5 : Lancer l'application Streamlit
 
 Une fois les dépendances installées, vous pouvez démarrer votre application.
 
@@ -181,6 +201,9 @@ graph TD
 
 ```
 EF1-EF2-Migration-Chatbot/
-├── main.py                 # Application Streamlit principale
-├── requirements.txt        # Dépendances Python
-└── README.md              # Documentation du projet
+├── main.py                    # Application Streamlit principale
+├── requirements.txt           # Dépendances Python
+├── .streamlit/
+│   └── secrets.toml          # Configuration sécurisée des clés API
+├── .gitignore                # Fichiers à exclure du contrôle de version
+└── README.md                 # Documentation du projet
