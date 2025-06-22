@@ -253,20 +253,27 @@ def main():
                 conv = DynatraceConverter(groq_api_key)
                 with st.spinner("Conversion en cours…"):
                     raw_yaml = conv.convert_ef1_to_ef2(ef1_input, st.session_state.system_prompt, st.session_state.selected_model)
+
+                # Check if the conversion itself returned an error message
+                if raw_yaml.startswith("Erreur lors de la conversion :"):
+                    st.error(raw_yaml)
+                    # Optionally, clear any previous YAML output or provide a placeholder
+                    st.text_area("YAML EF2", "Conversion échouée. Voir message d'erreur ci-dessus.", height=450, key="yaml_output_error")
+                else:
+                    yaml_clean = conv.normalize_yaml(raw_yaml)
+                    st.text_area("YAML EF2", yaml_clean, height=450, key="yaml_output_success")
+                    try:
+                        yaml.safe_load(yaml_clean)
+                        st.success("✅ YAML valide")
+                        st.download_button("💾 Télécharger extension.yaml", yaml_clean, "extension.yaml", "text/yaml", key="download")
+                    except yaml.YAMLError as e:
+                        st.error(f"⚠️ YAML invalide : {e}")
             else:
                 # This case should ideally not be reached if the button is correctly disabled.
                 # However, as a fallback, inform the user.
                 st.error("La clé API Groq n'est pas configurée. Impossible de convertir.")
                 # Prevent further execution in this block if API key is missing
-                st.stop()
-                yaml_clean = conv.normalize_yaml(raw_yaml)
-                st.text_area("YAML EF2", yaml_clean, height=450)
-                try:
-                    yaml.safe_load(yaml_clean)
-                    st.success("✅ YAML valide")
-                    st.download_button("💾 Télécharger extension.yaml", yaml_clean, "extension.yaml", "text/yaml", key="download")
-                except yaml.YAMLError as e:
-                    st.error(f"⚠️ YAML invalide : {e}")
+                # No st.stop() needed here as the rest of the logic is now correctly scoped.
 
     st.markdown("---")
     st.markdown("💡 *Application de démonstration technologique proposée par Erwin Labs SAS, qui n'a pas pour objectif d'être utilisée en production.*")
